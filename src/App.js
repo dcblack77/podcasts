@@ -5,13 +5,13 @@ import { Container } from 'react-bootstrap';
 
 function App() {
   return (
-    <div className="App row container">
+    <div className="App container">
       <header className="header">
         <Container>
           <h4 className="header-title text-start">Podcaster</h4><hr className=""/>
         </Container>
       </header>
-      <div className="row container">
+      <div className="container">
         <AppRouter />
       </div>
     </div>
