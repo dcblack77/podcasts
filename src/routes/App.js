@@ -9,7 +9,7 @@ const AppRouter = () => {
     <Router>
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route path="/podcast/:slug" element={<PodcastDetails />} />
+        <Route path="/podcast/:id" element={<PodcastDetails />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
