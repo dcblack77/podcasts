@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { useGetPodcasts } from '../hooks/usePodcast';
 
 const Home = () => {
-  const [podcasts, setPodcasts] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(`https://api.allorigins.win/get?url=${encodeURIComponent('https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json')}`);
-      setPodcasts(() => JSON.parse(response.data.contents).feed.entry);
-    };
-    fetchData();
-  }, []);
+  const [search, setSearch] = useState('');
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  }
+  const podcasts = useGetPodcasts(search);
+  
   return (
     <div className='container align-self-end'>
       <div className='row col-3 offset-9'>
         <div className="input-group">
-          <input type="text" className="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2"/>
-          <button className="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+          <input type="text" onChange={handleSearch} className="form-control col" placeholder="Search" aria-label="Search" aria-describedby="button-addon2"/>
         </div>
       </div>
       <div className='row'>
       {
-        podcasts.map((podcast, _key) => (
-          <div className="card mx-2 mt-2" style={{ width: '25em' }}>
-            <img src={podcast['im:image'][2].label} className="card-img-top rounded-circle p-5" alt="..." />
-            <div className="card-body">
-              <h5 className="card-title">{podcast['im:name'].label}</h5>
-              <p className="card-text"> Author: {podcast['im:artist'].label}</p>
+        podcasts.data &&
+        podcasts.data.map((podcast, _key) => (
+          <a href={`/podcast/${podcast.id.attributes['im:id']}`} className="card mx-2 mt-2" style={{ width: '25em' }}>
+            <div key={podcast.id.attributes['im:id']}>
+              <img src={podcast['im:image'][2].label} className="card-img-top rounded-circle p-5" alt="..." />
+              <div className="card-body">
+                <h5 className="card-title">{podcast['im:name'].label}</h5>
+                <p className="card-text"> Author: {podcast['im:artist'].label}</p>
+              </div>
             </div>
-          </div>
+          </a>
         ))
       }
       </div>
